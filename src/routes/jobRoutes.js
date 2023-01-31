@@ -3,15 +3,15 @@ const express = require("express")
 const router = express.Router()
 const { protectRoutes } = require("../middlewares/authMiddleWare")
 
-const Goal = require("../models/goal")
+const Job = require("../models/Job")
 const User = require("../models/user")
 
 router.get('/', protectRoutes, asyncHandler(async (req, res) => {
-    const goals = await Goal.find({
+    const Jobs = await Job.find({
         user: req.user.id
     })
 
-    res.status(200).json(goals)
+    res.status(200).json(Jobs)
 }))
 
 router.post('/', protectRoutes, asyncHandler(async (req, res) => {
@@ -20,20 +20,20 @@ router.post('/', protectRoutes, asyncHandler(async (req, res) => {
         throw new Error("Please add a text field")
     }
 
-    const goal = await Goal.create({
+    const Job = await Job.create({
         text: req.body.text,
         user: req.user.id
     })
 
-    res.status(200).json(goal)
+    res.status(200).json(Job)
 }))
 
 router.patch('/:id', protectRoutes, asyncHandler(async (req, res) => {
-    const goal = await Goal.findById(req.params.id)
+    const Job = await Job.findById(req.params.id)
 
-    if (!goal) {
+    if (!Job) {
         res.status(400)
-        throw new Error('Goal not found')
+        throw new Error('Job not found')
     }
 
     if (!req.user) {
@@ -41,24 +41,24 @@ router.patch('/:id', protectRoutes, asyncHandler(async (req, res) => {
         throw new Error("User not found")
     }
 
-    if (goal.user.toString() !== req.user.id) {
+    if (Job.user.toString() !== req.user.id) {
         res.status(401)
         throw new Error("User not authorized")
     }
 
-    const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
+    const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, {
         new: true
     })
 
-    res.status(200).json(updatedGoal)
+    res.status(200).json(updatedJob)
 }))
 
 router.delete('/:id', protectRoutes, asyncHandler(async (req, res) => {
-    const goal = await Goal.findById(req.params.id)
+    const Job = await Job.findById(req.params.id)
 
-    if (!goal) {
+    if (!Job) {
         res.status(400)
-        throw new Error("Goal not found")
+        throw new Error("Job not found")
     }
 
     if (!req.user) {
@@ -66,13 +66,13 @@ router.delete('/:id', protectRoutes, asyncHandler(async (req, res) => {
         throw new Error("User not found")
     }
 
-    if (goal.user.toString() !== req.user.id) {
+    if (Job.user.toString() !== req.user.id) {
         res.status(401)
         throw new Error("User not authorized")
     }
 
     res.status(200).json({
-        message: `Goal with id:${req.params.id} has been successfully deleted`
+        message: `Job with id:${req.params.id} has been successfully deleted`
     })
 }))
 

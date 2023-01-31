@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000
 // Middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use("/api/goals", require("./routes/goalRoutes"))
+app.use("/api/Jobs", require("./routes/JobRoutes"))
 app.use("/api/users", require("./routes/userRoutes"))
 app.use(errorHandler)
 
