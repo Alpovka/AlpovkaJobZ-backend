@@ -66,12 +66,7 @@ router.post("/login", asyncHandler(async (req, res) => {
 }))
 
 router.get("/me", protectRoutes, asyncHandler(async (req, res) => {
-    const { name, email } = await User.findById(req.user.id)
-
-    res.status(200).json({
-        name,
-        email,
-    })
+    res.status(200).json(req.user)
 }))
 
 const generateToken = (id) => {
