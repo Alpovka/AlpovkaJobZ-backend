@@ -32,7 +32,7 @@ router.patch('/:id', protectRoutes, asyncHandler(async (req, res) => {
 
     if (!offer) {
         res.status(400)
-        throw new Error('offer not found')
+        throw new Error('Offer not found')
     }
 
     if (!req.user) {
@@ -71,7 +71,7 @@ router.delete('/:id', protectRoutes, asyncHandler(async (req, res) => {
     }
 
     res.status(200).json({
-        message: `offer with id:${req.params.id} has been successfully deleted`
+        message: `Offer with id:${req.params.id} has been successfully deleted`
     })
 }))
 
