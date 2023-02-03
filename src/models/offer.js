@@ -6,9 +6,34 @@ const OfferSchema = mongoose.Schema({
         required: true,
         ref: 'User',
     },
-    text: {
-        type: String,
+    organization: {
+        type: mongoose.Schema.Types.String,
+        required: false,
+        ref: 'User'
+    },
+    title: {
+        type: mongoose.Schema.Types.String,
         required: true,
+    },
+    jobType: {
+        type: mongoose.Schema.Types.String,
+        required: true,
+    },
+    isRemote: {
+        type: mongoose.Schema.Types.Boolean,
+        required: false,
+    },
+    location: {
+        type: mongoose.Schema.Types.String,
+        required: true,
+    },
+    description: {
+        type: mongoose.Schema.Types.String,
+        required: true,
+    },
+    offeredMoney: {
+        type: mongoose.Schema.Types.Number,
+        required: false
     }
 }, {
     timestamps: true

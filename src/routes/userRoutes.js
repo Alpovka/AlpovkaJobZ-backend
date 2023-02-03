@@ -38,6 +38,7 @@ router.post("/", asyncHandler(async (req, res) => {
 
     if (user) {
         res.status(201).json({
+            name: user.name,
             token: generateToken(user.id)
         })
     } else {
@@ -56,7 +57,7 @@ router.post("/login", asyncHandler(async (req, res) => {
 
     if (user && (await bcrypt.compare(password, user.password))) {
         res.status(200).json({
-            message: `Welcome back ${user.name}!`,
+            name: user.name,
             token: generateToken(user.id)
         })
     } else {
@@ -64,6 +65,30 @@ router.post("/login", asyncHandler(async (req, res) => {
         throw new Error("Invalid credentials")
     }
 }))
+
+// FOR USER PASSWORD RESET THIS WILL BE USED LATER 
+// router.patch("/resetpass", asyncHandler(async (req, res) => {
+//     const { email, password } = req.body
+
+//     const user = await User.findOne({
+//         email
+//     })
+
+//     if (user) {
+//         await User.updateOne({
+//             email
+//         }, {
+//             password
+//         })
+//         res.status(200).json({
+//             message: "Password successfully changed.",
+//         })
+//     } else {
+//         res.status(404)
+//         throw new Error('User is not found')
+//     }
+// }))
+
 
 router.get("/me", protectRoutes, asyncHandler(async (req, res) => {
     res.status(200).json(req.user)
