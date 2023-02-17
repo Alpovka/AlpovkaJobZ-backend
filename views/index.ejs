@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpovka JobZ/Reset Password</title>
+</head>
+<body>
+    <h1><%= email%></h1>
+    <form action="" method="post">
+        <label>Password: <input name="password" type="password"/> </label><br />
+  <label>Confirm : <input name="confirm"  type="password"/> </label><br />
+  <input type="submit" onclick="CheckPassword()"/>
+    </form>
+</body>
+    <script type="text/javascript">
+        function CheckPassword() {
+        const password = document.querySelector('input[name=password]');
+        const confirm = document.querySelector('input[name=confirm]');
+        const passValidateRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,20}$/ 
+        if (confirm.value === password.value) {
+
+            if(!passValidateRegex.test(password.value) || !passValidateRegex.test(confirm.value)){
+
+            confirm.setCustomValidity('Not valid password! Password must contain, 6-20 characters, including at least 1 upper and lowercase letter, 1 number and 1 symbol.')
+
+            }else{
+                confirm.setCustomValidity('');
+            }
+
+        } else {
+            confirm.setCustomValidity('Passwords do not match');
+        }
+        }
+    </script>
+</html>

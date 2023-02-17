@@ -2,11 +2,14 @@ require("dotenv").config()
 require("./config/dbConnect")()
 const cors = require('cors');
 const colors = require("colors")
-const express = require("express")
-const { errorHandler } = require('./middlewares/errorMiddleWare')
+const express = require("express");
+const { errorHandler } = require('./middlewares/errorMiddleWare');
 
 const app = express()
 const port = process.env.PORT || 5000
+
+// UI for Node.js
+app.set("view engine", "ejs")
 
 // Middlewares
 app.use(cors())
