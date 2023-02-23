@@ -7,6 +7,14 @@ const User = require("../models/user")
 const { protectRoutes } = require("../middlewares/authMiddleWare")
 const nodemailer = require("nodemailer");
 
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.MAIL,
+        pass: process.env.PASS
+    }
+});
+
 router.post("/", asyncHandler(async (req, res) => {
     const { name, email, password } = req.body
 
@@ -38,10 +46,34 @@ router.post("/", asyncHandler(async (req, res) => {
     })
 
     if (user) {
-        res.status(201).json({
-            name: user.name,
-            token: generateToken(user.id)
-        })
+
+        const secret = process.env.JWT_SECRET + user.password;
+        try {
+            const token = jwt.sign({ email: user.email, id: user._id }, secret, {
+                expiresIn: "15m",
+            });
+
+            const link = `http://localhost:8000/api/users/confirmation/${user._id}/${token}`;
+
+            var mailOptions = {
+                from: 'karavelx@gmail.com',
+                to: user.email,
+                subject: 'Confirm your Email',
+                html: `Please click this link to confirm your email: <a href="${link}">${link}</a>`,
+            };
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    res.status(500)
+                    throw new Error("An Error occured")
+                } else {
+                    res.status(200).json("OK")
+                }
+            });
+        } catch (error) {
+            res.status(500)
+            throw new Error("An Error occured")
+        }
     } else {
         res.status(400)
         throw new Error("Invalid user data")
@@ -57,16 +89,48 @@ router.post("/login", asyncHandler(async (req, res) => {
     })
 
     if (user && (await bcrypt.compare(password, user.password))) {
+
+        if (!user.confirmed) {
+            res.status(500)
+            throw new Error("Please confirm your email to login")
+        }
+
         res.status(200).json({
             name: user.name,
             token: generateToken(user.id)
         })
+
     } else {
         res.status(404)
         throw new Error("Invalid credentials")
     }
 }))
 
+
+router.get("/confirmation/:id/:token", asyncHandler(async (req, res) => {
+    const { id, token } = req.params
+
+    const user = await User.findOne({
+        _id: id
+    })
+
+    try {
+        const secret = process.env.JWT_SECRET + user.password;
+        jwt.verify(token, secret)
+        await User.updateOne({
+            _id: id
+        }, {
+            $set: {
+                confirmed: true
+            }
+        })
+        res.send('<div><h3>Your email has been successfully confirmed!</h3><br/><a href="http://localhost:3000/JobZ/Login">Login</a></div>')
+        return
+    } catch (error) {
+        return res.status(500).send("Could not confirmed, try again later.")
+    }
+
+}))
 
 router.post("/forgot-password", asyncHandler(async (req, res) => {
     const { email } = req.body
@@ -83,19 +147,12 @@ router.post("/forgot-password", asyncHandler(async (req, res) => {
             });
 
             const link = `http://localhost:8000/api/users/reset-password/${user._id}/${token}`;
-            var transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: 'karavelx@gmail.com',
-                    pass: process.env.PASS
-                }
-            });
 
             var mailOptions = {
                 from: 'karavelx@gmail.com',
                 to: user.email,
                 subject: 'Password reset',
-                text: link
+                html: `Please click this link to change your password: <a href="${link}">${link}</a>`,
             };
 
             transporter.sendMail(mailOptions, function (error, info) {
@@ -105,7 +162,9 @@ router.post("/forgot-password", asyncHandler(async (req, res) => {
                     res.status(200).json("OK")
                 }
             });
-        } catch (error) { }
+        } catch (error) {
+            res.status(500).send("An Error occured")
+        }
     } else {
         res.status(404)
         throw new Error('User is not found')
@@ -154,10 +213,10 @@ router.post("/reset-password/:id/:token", asyncHandler(async (req, res) => {
                     password: encryptedPassword
                 }
             })
-            res.status(200).json("Password updated")
+            res.status(200).send('<div><h3>Your password has been successfully changed!</h3><a href="http://localhost:3000/JobZ/Login">Login</a></div>')
             res.render("index", { email: goVerify.email, status: "Verified" })
         } catch (error) {
-            res.status(500).json("Something went wrong")
+            res.status(500).json("An Error occured")
         }
     } else {
         res.status(404)

@@ -2,20 +2,24 @@ const mongoose = require("mongoose")
 
 const userSchema = mongoose.Schema({
     name: {
-        type: String,
+        type: mongoose.Schema.Types.String,
         required: true,
     },
     organization: {
-        type: String,
+        type: mongoose.Schema.Types.String,
         required: false,
     },
     email: {
-        type: String,
+        type: mongoose.Schema.Types.String,
         required: true,
         unique: true,
     },
+    confirmed: {
+        type: mongoose.Schema.Types.Boolean,
+        defaultValue: false,
+    },
     password: {
-        type: String,
+        type: mongoose.Schema.Types.String,
         required: true
     }
 }, {
