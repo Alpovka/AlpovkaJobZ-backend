@@ -6,6 +6,7 @@ const router = express.Router()
 const User = require("../models/user")
 const { protectRoutes } = require("../middlewares/authMiddleWare")
 const nodemailer = require("nodemailer");
+const htmlExporter = require("../../views/confirmView")
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -124,7 +125,7 @@ router.get("/confirmation/:id/:token", asyncHandler(async (req, res) => {
                 confirmed: true
             }
         })
-        res.send('<div><h3>Your email has been successfully confirmed!</h3><br/><a href="http://localhost:3000/JobZ/Login">Login</a></div>')
+        res.send(htmlExporter("Your email has been successfully confirmed!", "http://localhost:3000/JobZ/Login"))
         return
     } catch (error) {
         return res.status(500).send("Could not confirmed, try again later.")
@@ -213,7 +214,7 @@ router.post("/reset-password/:id/:token", asyncHandler(async (req, res) => {
                     password: encryptedPassword
                 }
             })
-            res.status(200).send('<div><h3>Your password has been successfully changed!</h3><a href="http://localhost:3000/JobZ/Login">Login</a></div>')
+            res.status(200).send(htmlExporter("Your password has been successfully changed!", "http://localhost:3000/JobZ/Login"))
             res.render("index", { email: goVerify.email, status: "Verified" })
         } catch (error) {
             res.status(500).json("An Error occured")

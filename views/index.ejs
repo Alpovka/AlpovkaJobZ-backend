@@ -5,14 +5,104 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alpovka JobZ/Reset Password</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+  body {
+    background-color: #08090A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: justify-evenly;
+  }
+  
+  div {
+    border: 1px solid #435555;
+    border-radius: 25px;
+    padding: 0.4em 2em 0 2em;
+    font-family: 'Quicksand', "sans-serif";
+    margin-top: 25vh;
+    color: #D1CFD2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition-property: 0.4s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    box-shadow: 0 4px 6px -1px #290C67;
+  }
+  
+  div:hover {
+    scale: 1.05;
+    box-shadow: none;
+  }
+    
+   header {
+      text-align: center;
+      font-size: 1.2em;
+      margin: 2em;
+    }
+    
+    form {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 100%;
+    }
+    
+    input {
+      background-color: rgb(23 23 23);
+      color: #d3d3d3;
+      border-radius: 25px;
+      border: none;
+      box-shadow: inset 2px 5px 10px rgb(5,5,5);
+      padding: 0.6em;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+      margin-bottom: 1em;
+    }
+    
+    button {
+    background-color: #252525;
+    transition-property: 0.4s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    color: #D1CFD2;
+    text-decoration: none;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin-bottom: 2em;
+      margin-top: 2em;
+      border: none;
+      height: 50px
+  }
+  
+  button:hover {
+    background-color: #7758E7;
+    cursor: pointer;
+  }
+  
+  footer {font-family: 'Quicksand', "sans-serif";
+    color: #D1CFD2;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    margin-top: 12.5vh
+  }
+  </style>
 </head>
 <body>
-    <h1><%= email%></h1>
+  <div>
+    <header><%= email%></header>
     <form action="" method="post">
-        <label>Password: <input name="password" type="password"/> </label><br />
-  <label>Confirm : <input name="confirm"  type="password"/> </label><br />
-  <input type="submit" onclick="CheckPassword()"/>
+     <input name="password" type="password" placeholder="New password"/>
+  <input name="confirm"  type="password" placeholder="Confirm new password"/>
+      <button type="submit" onclick="CheckPassword()">Change password</button>
     </form>
+  </div>
+    <footer>
+ <p>Alperen KARAVELIOGLU &copy; 2023</p></footer>
 </body>
     <script type="text/javascript">
         function CheckPassword() {
