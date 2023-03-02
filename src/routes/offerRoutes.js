@@ -21,13 +21,17 @@ router.post('/', protectRoutes, asyncHandler(async (req, res) => {
     }
 
     const offer = await Offer.create({
-        user: req.user.id,
+        userId: req.user.id,
+        userName: req.user.name,
         title: req.body.title,
         jobType: req.body.jobType,
         isRemote: req.body.isRemote,
         location: req.body.location,
         description: req.body.description,
-        offeredMoney: req.body?.offeredMoney | null,
+        offeredMoney: req.body.offeredMoney,
+        didSeen: null,
+        didAccepted: null,
+        didRejected: null,
     })
 
     res.status(200).json(offer)
@@ -71,7 +75,7 @@ router.delete('/:id', protectRoutes, asyncHandler(async (req, res) => {
         throw new Error("User not found")
     }
 
-    if (offer.user.toString() !== req.user.id) {
+    if (offer.userId.toString() !== req.user.id) {
         res.status(401)
         throw new Error("User not authorized")
     }

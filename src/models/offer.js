@@ -1,8 +1,13 @@
 const mongoose = require("mongoose")
 
 const OfferSchema = mongoose.Schema({
-    user: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User',
+    },
+    userName: {
+        type: mongoose.Schema.Types.String,
         required: true,
         ref: 'User',
     },
@@ -21,7 +26,7 @@ const OfferSchema = mongoose.Schema({
     },
     isRemote: {
         type: mongoose.Schema.Types.Boolean,
-        required: false,
+        defaultValue: false,
     },
     location: {
         type: mongoose.Schema.Types.String,
@@ -32,9 +37,21 @@ const OfferSchema = mongoose.Schema({
         required: true,
     },
     offeredMoney: {
-        type: mongoose.Schema.Types.Number,
+        type: mongoose.Schema.Types.String,
         required: false
-    }
+    },
+    didSeen: {
+        type: mongoose.Schema.Types.Boolean,
+        defaultValue: false,
+    },
+    didAccepted: {
+        type: mongoose.Schema.Types.Boolean,
+        defaultValue: false,
+    },
+    didRejected: {
+        type: mongoose.Schema.Types.Boolean,
+        defaultValue: false,
+    },
 }, {
     timestamps: true
 })
