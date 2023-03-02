@@ -37,8 +37,8 @@ router.post('/', protectRoutes, asyncHandler(async (req, res) => {
     res.status(200).json(offer)
 }))
 
-router.patch('/:id', protectRoutes, asyncHandler(async (req, res) => {
-    const offer = await Offer.findById(req.params.id)
+router.patch('/', protectRoutes, asyncHandler(async (req, res) => {
+    const offer = await Offer.findById(req.body.offerId)
 
     if (!offer) {
         res.status(400)
@@ -50,16 +50,22 @@ router.patch('/:id', protectRoutes, asyncHandler(async (req, res) => {
         throw new Error("User not found")
     }
 
-    if (offer.user.toString() !== req.user.id) {
+    if (offer.userId.toString() !== req.user.id) {
         res.status(401)
         throw new Error("User not authorized")
     }
 
-    const updatedoffer = await Offer.findByIdAndUpdate(req.params.id, req.body, {
+    const offerData = req.body
+
+    delete offerData.offerId
+
+    await Offer.findByIdAndUpdate(offer._id, offerData, {
         new: true
     })
 
-    res.status(200).json(updatedoffer)
+    res.status(200).json({
+        message: `Offer with id:${offer._id} has been successfully updated`
+    })
 }))
 
 router.delete('/:id', protectRoutes, asyncHandler(async (req, res) => {
