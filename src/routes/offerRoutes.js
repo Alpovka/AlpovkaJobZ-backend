@@ -59,13 +59,11 @@ router.patch('/', protectRoutes, asyncHandler(async (req, res) => {
 
     delete offerData.offerId
 
-    await Offer.findByIdAndUpdate(offer._id, offerData, {
+    const updatedOffer = await Offer.findByIdAndUpdate(offer._id, offerData, {
         new: true
     })
 
-    res.status(200).json({
-        message: `Offer with id:${offer._id} has been successfully updated`
-    })
+    res.status(200).json(updatedOffer)
 }))
 
 router.delete('/:id', protectRoutes, asyncHandler(async (req, res) => {
@@ -86,11 +84,9 @@ router.delete('/:id', protectRoutes, asyncHandler(async (req, res) => {
         throw new Error("User not authorized")
     }
 
-    await Offer.findByIdAndDelete(req.params.id)
+    const deletedOffer = await Offer.findByIdAndDelete(req.params.id)
 
-    res.status(200).json({
-        message: `Offer with id:${req.params.id} has been successfully deleted`
-    })
+    res.status(200).json(deletedOffer)
 }))
 
 module.exports = router
