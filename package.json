@@ -4,7 +4,8 @@
   "description": "Job setter app",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "NODE_ENV=development node src/server.js",
+    "start:production": "NODE_ENV=production node src/server.js",
     "server": "nodemon src/server.js"
   },
   "author": "Alpovka",

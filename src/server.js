@@ -8,9 +8,6 @@ const { errorHandler } = require('./middlewares/errorMiddleWare');
 const app = express()
 const port = process.env.PORT || 5000
 
-// UI for Node.js
-app.set("view engine", "ejs")
-
 // Middlewares
 app.use(cors())
 app.use(express.json())
