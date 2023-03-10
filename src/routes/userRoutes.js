@@ -7,7 +7,7 @@ const User = require("../models/user")
 const { protectRoutes } = require("../middlewares/authMiddleWare")
 const nodemailer = require("nodemailer");
 const htmlExporter = require("../../views/confirmView")
-const basePathChanger = require("../config/basePathChanger")
+const { basePathChangerForFront, basePathChangerForServer } = require("../config/basePathChanger")
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -55,7 +55,7 @@ router.post("/", asyncHandler(async (req, res) => {
                 expiresIn: "15m",
             });
 
-            const link = `${basePathChanger()}/api/users/confirmation/${user._id}/${token}`;
+            const link = `${basePathChangerForServer()}/api/users/confirmation/${user._id}/${token}`;
 
             var mailOptions = {
                 from: 'karavelx@gmail.com',
@@ -127,7 +127,7 @@ router.get("/confirmation/:id/:token", asyncHandler(async (req, res) => {
                 confirmed: true
             }
         })
-        res.send(htmlExporter("Your email has been successfully confirmed!", `${basePathChanger()}/JobZ/Login`))
+        res.send(htmlExporter("Your email has been successfully confirmed!", `${basePathChangerForFront()}/JobZ/Login`))
         return
     } catch (error) {
         return res.status(500).send("Could not confirmed, try again later.")
@@ -149,7 +149,7 @@ router.post("/forgot-password", asyncHandler(async (req, res) => {
                 expiresIn: "15m",
             });
 
-            const link = `${basePathChanger()}/api/users/reset-password/${user._id}/${token}`;
+            const link = `${basePathChangerForServer()}/api/users/reset-password/${user._id}/${token}`;
 
             var mailOptions = {
                 from: 'karavelx@gmail.com',
@@ -184,9 +184,11 @@ router.get("/reset-password/:id/:token", asyncHandler(async (req, res) => {
     if (user) {
         const secret = process.env.JWT_SECRET + user.password;
         try {
+            console.log("1")
             const goVerify = jwt.verify(token, secret)
             res.render("index", { email: goVerify.email, status: "Not verified" })
         } catch (error) {
+            console.log(error.message)
             res.send("Not verified")
         }
     } else {
@@ -216,7 +218,7 @@ router.post("/reset-password/:id/:token", asyncHandler(async (req, res) => {
                     password: encryptedPassword
                 }
             })
-            res.status(200).send(htmlExporter("Your password has been successfully changed!", `${basePathChanger()}/JobZ/Login`))
+            res.status(200).send(htmlExporter("Your password has been successfully changed!", `${basePathChangerForFront()}/JobZ/Login`))
             res.render("index", { email: goVerify.email, status: "Verified" })
         } catch (error) {
             res.status(500).json("An Error occured")
