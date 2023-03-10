@@ -6,6 +6,8 @@ const basePathChangerForServer = () => {
     }
 }
 
+
+
 const basePathChangerForFront = () => {
     if (process.env.NODE_ENV === "production") {
         return "https://alpovka.github.io"
