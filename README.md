@@ -1,2 +1,2 @@
 # AlpovkaJobZ-backend
-The Node.js Backend Layer for my ongoing additional project for Alpovka.github.io
+The Node.js Backend Layer for http://alpovka.github.io/JobZ
