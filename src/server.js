@@ -4,6 +4,7 @@ const cors = require('cors');
 const colors = require("colors")
 const express = require("express");
 const { errorHandler } = require('./middlewares/errorMiddleWare');
+const connectDB = require("./config/dbConnect");
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -19,4 +20,6 @@ app.use("/api/offers", require("./routes/offerRoutes"))
 app.use("/api/users", require("./routes/userRoutes"))
 app.use(errorHandler)
 
-app.listen(port, () => console.log(`Server started on port ${port}`))
+connectDB().then(() => {
+    app.listen(port, () => console.log(`Server started on port ${port}`))
+})
