@@ -61,7 +61,7 @@ router.post("/", asyncHandler(async (req, res) => {
                 from: 'karavelx@gmail.com',
                 to: user.email,
                 subject: 'Confirm your Email',
-                html: `Please click this link to confirm your email: <a href="${link}">${link}</a>`,
+                html: `Please click this link to confirm your email: <a href="${link}">${link}</a><br/><br/><p>If you are not the one who did this attempt. You can safely ignore this mail.</p>`,
             };
 
             transporter.sendMail(mailOptions, function (error, info) {
@@ -155,7 +155,7 @@ router.post("/forgot-password", asyncHandler(async (req, res) => {
                 from: 'karavelx@gmail.com',
                 to: user.email,
                 subject: 'Password reset',
-                html: `Please click this link to change your password: <a href="${link}">${link}</a>`,
+                html: `Please click this link to change your password: <a href="${link}">${link}</a><br/><br/><p>If you are not the one who did this attempt. You can safely ignore this mail.</p>`,
             };
 
             transporter.sendMail(mailOptions, function (error, info) {
