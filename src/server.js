@@ -1,5 +1,5 @@
 require("dotenv").config()
-require("./config/dbConnect")()
+require("./config/dbConnect")
 const cors = require('cors');
 const colors = require("colors")
 const express = require("express");
