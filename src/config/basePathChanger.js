@@ -1,6 +1,6 @@
 const basePathChangerForServer = () => {
     if (process.env.NODE_ENV === "production") {
-        return "https://alpovka-jobz-node.herokuapp.com"
+        return process.env.LIVE_URL
     } else {
         return "http://localhost:8000"
     }
